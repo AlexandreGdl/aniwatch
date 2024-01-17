@@ -8,8 +8,10 @@
 
     /* Bundler mode */
     "moduleResolution": "bundler",
+    "experimentalDecorators": true,
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
+    "esModuleInterop": true,
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
