@@ -7,6 +7,7 @@ import { MouseEvent, useContext } from "react";
 import { MediaProgress } from "../../components/controller/MediaProgress";
 import { useControls } from "../../state/player";
 import { useMediaPlaying } from "../../hooks/app/useMediaPlaying";
+import { FullScreenButton } from "../../components/controller/FullScreenButton";
 
 type OverlayProps = {
   hidden: boolean;
@@ -82,6 +83,7 @@ export const MediaController = () => {
       <OverlayItem>
         <PlayPauseButton />
         <MediaProgress />
+        <FullScreenButton />
       </OverlayItem>
     </Overlay>
   )

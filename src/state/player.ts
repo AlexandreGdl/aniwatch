@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { updateMediaPlaying } from "../hooks/app/useMediaPlaying";
 
 export type MediaControllerState = {
@@ -6,7 +7,9 @@ export type MediaControllerState = {
   isPlaying: () => boolean,
   setVolume: (volume: number) => void,
   setTime: (volume: number) => void,
-  getRef: () => HTMLVideoElement | undefined
+  getRef: () => HTMLVideoElement | undefined,
+  enterFullScreen: () => void,
+  exitFullScreen: () => void,
 }
 
 export type PlayerState = {
@@ -22,6 +25,7 @@ export type PlayerState = {
     volume: number;
     playbackSpeed: number;
     ref: HTMLVideoElement | null;
+    isFullscreen: boolean;
   };
   
   // state related to video progress
@@ -46,6 +50,7 @@ const playerState: PlayerState = {
     volume: 0,
     playbackSpeed: 1,
     ref: null,
+    isFullscreen: false,
   },
   progress: {
     time: 0,
@@ -67,13 +72,34 @@ export function setControllerState(
 }
 
 export function createMediaController(ref: HTMLVideoElement): MediaControllerState {
+  const elem = document.documentElement as any;
+  const page = document as any;
+
   return {
     play: ref.play.bind(ref),
     pause: ref.pause.bind(ref),
     isPlaying: () => !ref.paused,
     setVolume: (volume: number) => ref.volume = volume,
     setTime: (time: number) => ref.currentTime = time,
-    getRef: () => ref
+    getRef: () => ref,
+    enterFullScreen: () => {
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+      } else if (elem.webkitRequestFullscreen) { /* Safari */
+        elem.webkitRequestFullscreen();
+      } else if (elem.msRequestFullscreen) { /* IE11 */
+        elem.msRequestFullscreen();
+      }
+    },
+    exitFullScreen: () => {
+      if (page.exitFullscreen) {
+        page.exitFullscreen();
+      } else if (page.webkitExitFullscreen) { /* Safari */
+        page.webkitExitFullscreen();
+      } else if (page.msExitFullscreen) { /* IE11 */
+        page.msExitFullscreen();
+      }
+    },
   }
 }
 
@@ -97,6 +123,26 @@ export function useControls(): MediaControllerState {
     },
     setTime(time: number) {
       state.controller?.setTime(time);
+    },
+    enterFullScreen() {
+      state.controller?.enterFullScreen();
+      updateMediaPlaying({
+        ...state,
+        mediaPlaying: {
+          ...state.mediaPlaying,
+          isFullscreen: true,
+        }
+      })
+    },
+    exitFullScreen() {
+      state.controller?.exitFullScreen();
+      updateMediaPlaying({
+        ...state,
+        mediaPlaying: {
+          ...state.mediaPlaying,
+          isFullscreen: false,
+        }
+      })
     },
     pause() {
       updateMediaPlaying({

@@ -12,6 +12,7 @@ type MediaPlayingEvent = {
   isFirstLoading: boolean;
   volume: number;
   playbackSpeed: number;
+  isFullscreen: boolean;
   ref: HTMLVideoElement | null;
 };
 
@@ -29,6 +30,7 @@ function getMediaPlayingFromState(
     volume: state.mediaPlaying.volume,
     playbackSpeed: state.mediaPlaying.playbackSpeed,
     ref: state.mediaPlaying.ref,
+    isFullscreen: state.mediaPlaying.isFullscreen,
   };
 }
 
