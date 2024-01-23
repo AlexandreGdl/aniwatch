@@ -29,7 +29,7 @@ export class AnimeEpisodeInfo {
   "sources": AnimeEpisodeSource[];
 
   get highestQuality() {
-    return this.sources.find((source) => source.quality === QualityVideo.HIGH)
+    return this.sources.find((source) => source.quality === QualityVideo.HIGH) ?? this.sources.find((source) => source.quality === QualityVideo.DEFAULT)
   }
 
   getByQuality(quality: QualityVideo) {

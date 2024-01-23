@@ -7,6 +7,10 @@ type Props = {
   title: string;
 }
 
+type MediaProps = {
+  image: string
+}
+
 const HorizontalList = styled.div`
   display: flex;
   flex-direction: row;
@@ -33,7 +37,7 @@ const CustomLink = styled(Link)`
 // Avoid fowarding unwanted props to html
 const MediaCard = styled('div').withConfig({
   shouldForwardProp: (prop) => !['image'].includes(prop),
-})<{image: string}>`
+})<MediaProps>`
   width: 100%;
   height: 100%;
   border-radius: 6px;
@@ -70,7 +74,7 @@ const BluredDiv = styled.div`
   height: 25px;
 `;
 const ListContainer = styled.div`
-  margin-top: 20px;
+  padding-top: 20px;
 `;
 const ListTitle = styled.h4`
   color: white;
@@ -81,8 +85,8 @@ const ListTitle = styled.h4`
 
 export const List = ({data, title}: Props) => {
   const listItem = <HorizontalList>{data.map((item) => (
-    <CustomLink to={'/media/'+item.id}>
-      <MediaCard key={item.id} image={item.image}>
+    <CustomLink key={item.id} to={'/media/'+item.id}>
+      <MediaCard image={item.image}>
         <BluredDiv>
           <MediaTitle>{item.shortTitle}</MediaTitle>
         </BluredDiv>

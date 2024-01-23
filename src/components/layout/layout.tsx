@@ -1,12 +1,21 @@
 import styled from "styled-components"
 
-const Container = styled.div`
-  width: 100vw;
+type Props = {
+  background?: string;
+  fullScreen?: boolean
+} & React.ComponentProps<'div'>
+
+const Container = styled('div').withConfig({
+  shouldForwardProp: (prop) => !['background', 'fullScreen'].includes(prop)
+})<Props>`
+  width: 100%;
   height: 100vh;
-  max-width: 100%;
+  ${({background}) => background && `
+    background: ${background};
+  `}
 `;
 
-export const Layout = (props: React.ComponentProps<'div'>) => {
+export const Layout = (props: Props) => {
   return (
     <Container {...props} />
   );

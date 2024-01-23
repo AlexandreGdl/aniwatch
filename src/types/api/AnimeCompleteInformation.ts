@@ -1,6 +1,6 @@
 import { Expose, Type } from "class-transformer";
 
-class EpisodeInfo {
+export class EpisodeInfo {
   @Expose()
   "id": string;
   @Expose()

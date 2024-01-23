@@ -1,8 +1,10 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import { Home } from './pages/Home';
 import { GlobalStyle } from './styles';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { Media } from './pages/Media';
+import { Home } from './Pages/Home';
+import { Media } from './Pages/Media/Media';
+import { ThemeProvider } from 'styled-components';
+import { myTheme } from './styles/theme';
 
 const router = createBrowserRouter([
   {
@@ -17,12 +19,20 @@ const router = createBrowserRouter([
 
 function App() {
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false, // default: true
+    },
+  },
+})
   return (
-    <QueryClientProvider client={queryClient}>
-      <GlobalStyle />
-      <RouterProvider router={router} />
-    </QueryClientProvider>
+    <ThemeProvider theme={myTheme}>
+      <QueryClientProvider client={queryClient}>
+        <GlobalStyle />
+        <RouterProvider router={router} />
+      </QueryClientProvider>
+    </ThemeProvider>
   )
 }
 
