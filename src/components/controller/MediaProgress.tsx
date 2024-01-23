@@ -24,7 +24,6 @@ const ActiveProgress = styled('div')`
   height: 100%;
   border-radius: 50px;
   cursor: grab;
-  transition: all .5s;
 `;
 const TimeText = styled('p')`
   width: 45px;
