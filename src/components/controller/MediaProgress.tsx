@@ -5,8 +5,6 @@ import { useMemo, useState } from "react";
 import moment from "moment";
 import { getPlayerState, useControls } from "../../state/player";
 
-type ActiveProps = {width: string};
-
 const Container = styled('div')`
   flex-grow: 1;
   display: flex;
