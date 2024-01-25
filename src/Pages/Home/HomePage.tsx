@@ -1,9 +1,9 @@
-import { Layout } from "../components";
-import { useTopAiringAnime } from "../hooks/api/useTopAiringAnime";
-import { List } from "../components/list/list";
-import { useRecentAnime } from "../hooks/api/useRecentAnime";
+import { Layout } from "../../components";
+import { useTopAiringAnime } from "../../hooks/api/useTopAiringAnime";
+import { List } from "../../components/list/list";
+import { useRecentAnime } from "../../hooks/api/useRecentAnime";
 
-export const Home = () => {
+export const HomePage = () => {
   const topAiringAnime = useTopAiringAnime();
   const recentAnime = useRecentAnime();
 

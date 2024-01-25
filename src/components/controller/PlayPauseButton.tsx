@@ -8,7 +8,7 @@ import styled, { ThemeContext } from "styled-components";
 const StyledPlayButton = styled(PlayIcon)`
   cursor: pointer;
   &:hover {
-    color: #eb6f6f;
+    color: ${({theme}) => theme.color.primary};
     transform: scale(1.2);
   }
   transition: all .3s;
@@ -16,7 +16,7 @@ const StyledPlayButton = styled(PlayIcon)`
 const StyledPauseButton = styled(PauseIcon)`
   cursor: pointer;
   &:hover {
-    color: #eb6f6f;
+    color: ${({theme}) => theme.color.primary};
     transform: scale(1.2);
   }
   transition: all .3s;

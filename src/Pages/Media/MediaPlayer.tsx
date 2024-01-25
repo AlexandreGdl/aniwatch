@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Hls from "hls.js";
 import styled from "styled-components";
 import { useMediaEpisode } from "../../hooks/api/useMediaEpisode";
-import { createMediaController, getPlayerState, setControllerState } from "../../state/player";
+import { createMediaController, getPlayerState, hls, setControllerState } from "../../state/player";
 import { updateMediaPlaying } from "../../hooks/app/useMediaPlaying";
 
 type Props = {
@@ -14,7 +14,6 @@ const StyledVideo = styled('video').withConfig({})`
   width: 100%;
 `;
 
-const hls = new Hls();
 export const MediaPlayer = ({episodeId}: Props) => {
   const [stream, setStream] = useState<undefined | string>(undefined)
   const episodeInfo = useMediaEpisode(episodeId);
@@ -25,13 +24,8 @@ export const MediaPlayer = ({episodeId}: Props) => {
     // Init Hls
     if (Hls.isSupported() && current) {
       const state = getPlayerState();
-      updateMediaPlaying({
-        ...state,
-        mediaPlaying: {
-          ...state.mediaPlaying,
-          ref: current
-        }
-      })
+      state.mediaPlaying.ref = current;
+      updateMediaPlaying(state);
       hls.attachMedia(current);
     }
   }, []);
@@ -39,6 +33,10 @@ export const MediaPlayer = ({episodeId}: Props) => {
   useEffect(() => {
     if (episodeInfo.data && episodeInfo.data.highestQuality && videoRef.current) {
       setStream(episodeInfo.data.highestQuality.url);
+      const state = getPlayerState();
+      state.mediaPlaying.qualities = episodeInfo.data.sources;
+      state.mediaPlaying.activeQuality = episodeInfo.data.highestQuality.quality;
+      updateMediaPlaying(state);
     }
   }, [episodeInfo]);
 

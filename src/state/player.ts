@@ -1,5 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import Hls from "hls.js";
 import { updateMediaPlaying } from "../hooks/app/useMediaPlaying";
+import { AnimeEpisodeSource, QualityVideo } from "../types/api/AnimeEpisodeInfo";
+import { EpisodeInfo } from "../types/api/AnimeCompleteInformation";
 
 export type MediaControllerState = {
   play: () => void,
@@ -12,6 +15,7 @@ export type MediaControllerState = {
   exitFullScreen: () => void,
 }
 
+export const hls = new Hls();
 export type PlayerState = {
   controller: null | MediaControllerState,
   mediaPlaying: {
@@ -26,8 +30,11 @@ export type PlayerState = {
     playbackSpeed: number;
     ref: HTMLVideoElement | null;
     isFullscreen: boolean;
+    qualities: AnimeEpisodeSource[];
+    activeQuality?: QualityVideo;
+    episodes: EpisodeInfo[];
+    activeEpisodeId?: string,
   };
-  
   // state related to video progress
   progress: {
     time: number;
@@ -37,7 +44,7 @@ export type PlayerState = {
   }
 }
 
-const playerState: PlayerState = {
+let playerState: PlayerState = {
   controller: null,
   mediaPlaying: {
     isPlaying: false,
@@ -51,13 +58,21 @@ const playerState: PlayerState = {
     playbackSpeed: 1,
     ref: null,
     isFullscreen: false,
+    qualities: [],
+    activeQuality: undefined,
+    episodes: [],
+    activeEpisodeId: undefined,
   },
   progress: {
     time: 0,
     duration: 0,
     draggingTime: 0,
     buffered: 0,
-  }
+  },
+}
+
+export function updatePlayerState(state: PlayerState) {
+  playerState = state;
 }
 
 export function getPlayerState() {

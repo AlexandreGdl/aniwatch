@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { PlayerState, getPlayerState } from "../../state/player";
+import { PlayerState, getPlayerState, updatePlayerState } from "../../state/player";
 import { listenEvent, sendEvent, unlistenEvent } from "../../utils/event";
 
 export type VideoProgressEvent = {
@@ -19,6 +19,7 @@ function getProgressFromState(state: PlayerState): VideoProgressEvent {
 }
 
 export function updateProgress(state: PlayerState) {
+  updatePlayerState(state);
   sendEvent<VideoProgressEvent>(
     "progress",
     getProgressFromState(state)

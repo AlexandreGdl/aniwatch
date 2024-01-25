@@ -6,8 +6,10 @@ import { useMediaInfo } from "../../hooks/api/useMediaInfo";
 import SpinLoader from "../../components/common/spinner";
 import { EpisodeInfo } from "../../types/api/AnimeCompleteInformation";
 import styled from "styled-components";
-import { MediaController } from "./MediaController";
 import { ProgressListener } from "../../hooks/app/useProgressListener";
+import { MediaController } from "./MediaController";
+import { getPlayerState } from "../../state/player";
+import { updateMediaPlaying } from "../../hooks/app/useMediaPlaying";
 
 const Container = styled.div`
   height: 100vh; // fullscreen
@@ -18,7 +20,7 @@ const Container = styled.div`
 `;
 
 
-export const Media = () => {
+export const MediaPage = () => {
   const [currentEpisode, setCurrentEpisode] = useState<undefined | EpisodeInfo>(undefined);
   const {mediaId} = useParams<keyof {mediaId: string}>() as {mediaId: string};
   if (!mediaId) throw new Error('Error, MediaId couldn\'t be found in params');
@@ -27,6 +29,10 @@ export const Media = () => {
   useEffect(() => {
     if (mediaInfo.data) {
       setCurrentEpisode(mediaInfo.data.latestEpisode);
+      const state = getPlayerState();
+      state.mediaPlaying.episodes = mediaInfo.data.episodes;
+      state.mediaPlaying.activeEpisodeId = mediaInfo.data.latestEpisode.id;
+      updateMediaPlaying(state);
     }
   }, [mediaInfo]);
 
@@ -35,7 +41,7 @@ export const Media = () => {
       <Container>
         <ProgressListener />
         {mediaInfo.isLoading && <SpinLoader />}
-        <MediaController />
+        <MediaController title={mediaInfo.data?.title} />
         {currentEpisode && <MediaPlayer episodeId={currentEpisode.id} />}
       </Container>
     </Layout>

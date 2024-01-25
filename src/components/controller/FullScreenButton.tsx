@@ -7,7 +7,7 @@ import { ArrowsPointingOutIcon, ArrowsPointingInIcon } from "@heroicons/react/20
 const StyledExtendIcon = styled(ArrowsPointingOutIcon)`
   cursor: pointer;
   &:hover {
-    color: #eb6f6f;
+    color: ${({theme}) => theme.color.primary};
     transform: scale(1.2);
   }
   transition: all .3s;
@@ -15,7 +15,7 @@ const StyledExtendIcon = styled(ArrowsPointingOutIcon)`
 const StyledRetractIcon = styled(ArrowsPointingInIcon)`
   cursor: pointer;
   &:hover {
-    color: #eb6f6f;
+    color: ${({theme}) => theme.color.primary};
     transform: scale(1.2);
   }
   transition: all .3s;
@@ -24,6 +24,7 @@ const StyledRetractIcon = styled(ArrowsPointingInIcon)`
 
 export const FullScreenButton = () => {
   const theme = useContext(ThemeContext);
+  if (!theme) throw Error('Theme was not initialized');
   const controls = useControls();
   const mediaPlaying = useMediaPlaying();
 
@@ -35,6 +36,6 @@ export const FullScreenButton = () => {
   }
 
   return (
-    <Button width={theme?.iconSize} height={theme?.iconSize} color="white" onClick={handleFullScreenAction} />
+    <Button width={theme.iconSizeSM} height={theme.iconSizeSM} color="white" onClick={handleFullScreenAction} />
   )
 }

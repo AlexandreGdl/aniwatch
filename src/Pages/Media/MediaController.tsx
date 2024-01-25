@@ -8,9 +8,19 @@ import { MediaProgress } from "../../components/controller/MediaProgress";
 import { useControls } from "../../state/player";
 import { useMediaPlaying } from "../../hooks/app/useMediaPlaying";
 import { FullScreenButton } from "../../components/controller/FullScreenButton";
+import { QualityController } from "../../components/controller/QualityController";
+import { EpisodesController } from "../../components/controller/EpisodesController";
 
 type OverlayProps = {
   hidden: boolean;
+}
+
+type OverlayItemProps = {
+  reverse?: boolean;
+}
+
+type MediaControllerProps = {
+  title?: string;
 }
 
 const Overlay = styled('div').withConfig({
@@ -27,10 +37,6 @@ const Overlay = styled('div').withConfig({
   color: white;
   left: 0;
   top: 0;
-  padding: 15px;
-  -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-  -moz-box-sizing: border-box;    /* Firefox, other Gecko */
-  box-sizing: border-box;
   background-color: rgba(0,0,0,0.1);
 
   ${({hidden}) => hidden && `
@@ -43,25 +49,36 @@ const Overlay = styled('div').withConfig({
 
   transition: all .2s;
 `;
-const OverlayItem = styled.div`
+const OverlayItem = styled('div').withConfig({
+  shouldForwardProp: (prop) => !['reverse'].includes(prop),
+})<OverlayItemProps>`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 15px; 
+  padding: 15px;
+  ${({reverse}) => reverse ? 'padding-top: 40px' : 'padding-bottom'}: 40px;
   gap: 15px;
+  background-image: linear-gradient(to ${({reverse}) => reverse ? 'top' : 'bottom'}, rgba(0,0,0,0.8), rgba(0,0,0,0.6), rgba(0,0,0,0.4), rgba(0,0,0,0));
+
 `;
 const StyledGoBack = styled(ChevronLeftIcon)`
   cursor: pointer;
   &:hover {
-    color: #eb6f6f;
+    color: ${({theme}) => theme.color.primary};
     transform: scale(1.2);
   }
 
   transition: all .3s;
-`
+`;
 
-export const MediaController = () => {
+const Row = styled('div')`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`;
+
+export const MediaController = ({title}: MediaControllerProps) => {
   const controls = useControls();
   const mediaPlaying = useMediaPlaying();
   const theme = useContext(ThemeContext);
@@ -78,11 +95,16 @@ export const MediaController = () => {
   return (
     <Overlay hidden={isMouseStatic} id="control-interface" onClick={handleInterfaceClicked}>
       <OverlayItem>
-        <StyledGoBack onClick={goBack} width={theme?.iconSize} height={theme?.iconSize} color="white"/>
+        <Row>
+          <StyledGoBack onClick={goBack} width={theme?.iconSize} height={theme?.iconSize} color="white"/>
+          <p>{title}</p>
+        </Row>
       </OverlayItem>
-      <OverlayItem>
+      <OverlayItem reverse>
         <PlayPauseButton />
         <MediaProgress />
+        <EpisodesController />
+        <QualityController />
         <FullScreenButton />
       </OverlayItem>
     </Overlay>

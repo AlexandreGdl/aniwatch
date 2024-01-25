@@ -1,19 +1,19 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { GlobalStyle } from './styles';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { Home } from './Pages/Home';
-import { Media } from './Pages/Media/Media';
+import { HomePage } from './Pages/Home/HomePage';
+import { MediaPage } from './pages/Media/MediaPage';
 import { ThemeProvider } from 'styled-components';
 import { myTheme } from './styles/theme';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Home />
+    element: <HomePage />
   },
   {
     path: '/media/:mediaId',
-    element: <Media />
+    element: <MediaPage />
   }
 ])
 

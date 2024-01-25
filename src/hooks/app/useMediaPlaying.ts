@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
-import { PlayerState, getPlayerState } from "../../state/player";
+import { PlayerState, getPlayerState, updatePlayerState } from "../../state/player";
 import { listenEvent, sendEvent, unlistenEvent } from "../../utils/event";
+import { AnimeEpisodeSource, QualityVideo } from "../../types/api/AnimeEpisodeInfo";
+import { EpisodeInfo } from "../../types/api/AnimeCompleteInformation";
 
 type MediaPlayingEvent = {
   isPlaying: boolean;
@@ -14,6 +16,10 @@ type MediaPlayingEvent = {
   playbackSpeed: number;
   isFullscreen: boolean;
   ref: HTMLVideoElement | null;
+  qualities: AnimeEpisodeSource[];
+  activeQuality: QualityVideo | undefined;
+  activeEpisodeId?: string;
+  episodes: EpisodeInfo[];
 };
 
 function getMediaPlayingFromState(
@@ -31,6 +37,10 @@ function getMediaPlayingFromState(
     playbackSpeed: state.mediaPlaying.playbackSpeed,
     ref: state.mediaPlaying.ref,
     isFullscreen: state.mediaPlaying.isFullscreen,
+    activeQuality: state.mediaPlaying.activeQuality,
+    qualities: state.mediaPlaying.qualities,
+    activeEpisodeId: state.mediaPlaying.activeEpisodeId,
+    episodes: state.mediaPlaying.episodes,
   };
 }
 
@@ -38,6 +48,7 @@ function getMediaPlayingFromState(
 export function updateMediaPlaying(
   state: PlayerState
 ) {
+  updatePlayerState(state);
   sendEvent<MediaPlayingEvent>(
     "mediaplaying",
     getMediaPlayingFromState(state)

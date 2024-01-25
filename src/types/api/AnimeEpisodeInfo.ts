@@ -1,6 +1,6 @@
 import { Expose, Type } from "class-transformer";
 
-enum QualityVideo {
+export enum QualityVideo {
   DEFAULT = 'default',
   BACKUP = 'backup',
   LOW = '360p',
@@ -15,7 +15,7 @@ class AnimeEpisodeHeader {
   "User-Agent": string | null; // or null
 }
 
-class AnimeEpisodeSource {
+export class AnimeEpisodeSource {
   "url": string;
   "quality": QualityVideo;
   "isM3U8": boolean;

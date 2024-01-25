@@ -11,7 +11,7 @@ export const useIsMouseStatic = () => {
       timeout = setTimeout(() => {
         setIsMouseStatic(true);
         
-      }, (3000));
+      }, (1500));
     });
 
     return () => {
